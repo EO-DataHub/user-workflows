@@ -1,6 +1,7 @@
 import json
 import click
 import pyeodh
+from datetime import datetime, date, timedelta
 
 
 @click.command()
@@ -27,11 +28,32 @@ def main(catalog, collection, intersects, start_datetime, end_datetime):
         limit=1,
     )
     urls = []
-    for item in items[0:1]:
+    months = get_months(start_datetime, end_datetime)
+
+    for item in items[:1]:
         urls.append(item._pystac_object.self_href)
+        ym = date.fromisoformat(item.datetime).strftime("%Y-%m")
+        months[ym].append(item._pystac_object.href)
 
     with open("urls.txt", "w") as f:
         print(*urls, file=f, sep="\n", end="")
+
+    with open("months.json", "w") as f:
+        json.dump(months, f)
+
+
+def get_months(start_str, end_str):
+    start = date.fromisoformat(start_str)
+    end = date.fromisoformat(end_str)
+
+    months = {}
+
+    for d in range((end - start).days):
+        ym = (start + timedelta(days=d)).strftime("%Y-%m")
+        if ym not in months:
+            months[ym] = []
+
+    return months
 
 
 if __name__ == "__main__":
