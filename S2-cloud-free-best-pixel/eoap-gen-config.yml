@@ -89,16 +89,18 @@ steps:
 
   - id: mosaic
     script: S2-cloud-free-best-pixel/cli/mosaic/mosaic.py
+    requirements: S2-cloud-free-best-pixel/cli/mosaic/requirements.txt
     scatter_method: dotproduct
     inputs:
       - id: intersects
         source: cloud-free-best-pixel/intersects
-      - id: months
+      - id: month_json
         source: search/months
         scatter: true
-        type: File[]
-      - id: images
+        type: File
+      - id: all_images
         source: rm_cloud/cloud_masked
+        type: File[]
     outputs:
       - id: best_pixel
         type: File

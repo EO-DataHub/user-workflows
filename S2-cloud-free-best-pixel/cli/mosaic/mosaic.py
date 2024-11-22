@@ -6,8 +6,8 @@ import click
 
 
 @click.command()
-@click.argument("--intersects")
-@click.argument("--month-json")
+@click.option("--intersects")
+@click.option("--month-json")
 @click.argument("all_images", nargs=-1)
 def main(intersects, month_json, all_images):
     with open(month_json, "r") as f:
