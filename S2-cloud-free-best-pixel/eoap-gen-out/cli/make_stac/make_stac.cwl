@@ -16,7 +16,7 @@ outputs:
   outputBinding:
     glob: .
   type: Directory
-hints:
+requirements:
 - class: DockerRequirement
   dockerPull: ghcr.io/EO-DataHub/user-workflows/make_stac:main
 - class: InlineJavascriptRequirement

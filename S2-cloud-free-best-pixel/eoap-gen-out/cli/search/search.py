@@ -16,7 +16,6 @@ def main(catalog, collection, intersects, start_datetime, end_datetime):
 
     intersects = json.loads(intersects)
     rc = pyeodh.Client().get_catalog_service()
-
     items = rc.search(
         collections=[collection],
         catalog_paths=[catalog],
@@ -32,11 +31,11 @@ def main(catalog, collection, intersects, start_datetime, end_datetime):
 
     for item in items[:1]:
         urls.append(item._pystac_object.self_href)
-        ym = date.fromisoformat(item.datetime).strftime("%Y-%m")
+        ym = item.datetime.strftime("%Y-%m")
         months[ym].append(
             {
                 "id": item.id,
-                "href": item._pystac_object.href,
+                "href": item._pystac_object.self_href,
             }
         )
 
@@ -44,6 +43,8 @@ def main(catalog, collection, intersects, start_datetime, end_datetime):
         print(*urls, file=f, sep="\n", end="")
 
     for month in months:
+        if len(months[month]) == 0:
+            continue
         with open(f"month_{month}.json", "w") as f:
             json.dump(months[month], f)
 

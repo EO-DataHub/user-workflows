@@ -47,7 +47,7 @@ outputs:
   type:
     items: string
     type: array
-hints:
+requirements:
 - class: DockerRequirement
   dockerPull: ghcr.io/EO-DataHub/user-workflows/search:main
 - class: InlineJavascriptRequirement

@@ -1,6 +1,8 @@
+import threading
 import click
 import pyeodh
 import rioxarray
+import rasterio
 import xarray
 from pyeodh.resource_catalog import Item
 
@@ -16,20 +18,25 @@ def main(item_url):
     cloud_href = item.assets["cloud"].href
     valid_href = item.assets["valid_pixels"].href
     cog_href = item.assets["cog"].href
-
-    valid = rioxarray.open_rasterio(valid_href)
-    cloud = rioxarray.open_rasterio(cloud_href)
-    cog = rioxarray.open_rasterio(cog_href)
-
+    print("open_rasterio")
+    valid = rioxarray.open_rasterio(valid_href, chunks=True)
+    cloud = rioxarray.open_rasterio(cloud_href, chunks=True)
+    cog = rioxarray.open_rasterio(cog_href, chunks=True)
+    print("valid+cloud")
     result = valid + cloud
     # Set values greater than 1 to 0, others remain as 1
+    print("xarray where")
     result = xarray.where(result > 1, 0, 1)
-
     # Multiply cog.tif by the result
     # We need to expand the result to match the shape of cog
+    print("cog * result")
     fin = cog * result.squeeze("band").expand_dims(band=cog.band)
 
-    fin.rio.to_raster(raster_path=f"{item.id}.tif", driver="COG")
+    print("to_raster")
+    with rasterio.Env(CHECK_DISK_FREE_SPACE="NO"):
+        fin.rio.to_raster(
+            raster_path=f"{item.id}.tif", tiled=True, lock=threading.Lock()
+        )
 
 
 if __name__ == "__main__":

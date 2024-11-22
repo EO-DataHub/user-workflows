@@ -13,7 +13,7 @@ outputs:
   outputBinding:
     glob: '*.tif'
   type: File
-hints:
+requirements:
 - class: DockerRequirement
   dockerPull: ghcr.io/EO-DataHub/user-workflows/rm_cloud:main
 - class: InlineJavascriptRequirement

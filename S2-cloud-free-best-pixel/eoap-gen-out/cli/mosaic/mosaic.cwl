@@ -20,7 +20,7 @@ outputs:
   outputBinding:
     glob: '*.tif'
   type: File
-hints:
+requirements:
 - class: DockerRequirement
   dockerPull: ghcr.io/EO-DataHub/user-workflows/mosaic:main
 - class: InlineJavascriptRequirement

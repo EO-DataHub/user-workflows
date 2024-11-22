@@ -13,7 +13,7 @@ $graph:
     type:
     - 'null'
     - string
-  hints:
+  requirements:
   - class: DockerRequirement
     dockerPull: ghcr.io/EO-DataHub/user-workflows/make_stac:main
   - class: InlineJavascriptRequirement
@@ -49,7 +49,7 @@ $graph:
     outputBinding:
       glob: '*.tif'
     type: File
-  hints:
+  requirements:
   - class: DockerRequirement
     dockerPull: ghcr.io/EO-DataHub/user-workflows/mosaic:main
   - class: InlineJavascriptRequirement
@@ -71,7 +71,7 @@ $graph:
     outputBinding:
       glob: '*.tif'
     type: File
-  hints:
+  requirements:
   - class: DockerRequirement
     dockerPull: ghcr.io/EO-DataHub/user-workflows/rm_cloud:main
   - class: InlineJavascriptRequirement
@@ -127,7 +127,7 @@ $graph:
     type:
       items: string
       type: array
-  hints:
+  requirements:
   - class: DockerRequirement
     dockerPull: ghcr.io/EO-DataHub/user-workflows/search:main
   - class: InlineJavascriptRequirement
