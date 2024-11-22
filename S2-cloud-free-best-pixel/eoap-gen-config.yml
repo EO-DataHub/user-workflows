@@ -1,0 +1,121 @@
+id: cloud-free-best-pixel
+doc: Generate cloud free best pixel mosaic on a per month basis
+label: Cloud free best pixel
+inputs:
+  - id: catalog
+    label: Catalog path
+    doc: Full catalog path
+    type: string
+    default: supported-datasets/ceda-stac-catalogue
+  - id: collection
+    label: collection id
+    doc: collection id
+    type: string
+    default: sentinel2_ard
+  - id: intersects
+    label: Intersects
+    doc: >
+      a GeoJSON-like json string, which provides a "type" member describing the type of the geometry and "coordinates" 
+      member providing a list of coordinates. Will search for images intersecting this geometry.
+    type: string
+    default: >
+      {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [0.08905898091569497, 52.69722175598818],
+            [0.08905898091569497, 52.15527412683906],
+            [0.9565339502005088, 52.15527412683906],
+            [0.9565339502005088, 52.69722175598818],
+            [0.08905898091569497, 52.69722175598818],
+          ]
+        ],
+      }
+  - id: start_datetime
+    label: Start datetime
+    doc: Start datetime
+    type: string
+    default: "2023-04-01"
+  - id: end_datetime
+    label: End datetime
+    doc: End datetime
+    type: string
+    default: "2023-06-30"
+
+outputs:
+  - id: stac_output
+    type: Directory
+    source: make_stac/stac_catalog
+steps:
+  - id: search
+    script: S2-cloud-free-best-pixel/cli/search/search.py
+    requirements: S2-cloud-free-best-pixel/cli/search/requirements.txt
+    inputs:
+      - id: catalog
+        source: cloud-free-best-pixel/catalog
+      - id: collection
+        source: cloud-free-best-pixel/collection
+      - id: intersects
+        source: cloud-free-best-pixel/intersects
+      - id: start_datetime
+        source: cloud-free-best-pixel/start_datetime
+      - id: end_datetime
+        source: cloud-free-best-pixel/end_datetime
+    outputs:
+      - id: urls
+        type: string[]
+        outputBinding:
+          loadContents: true
+          glob: urls.txt
+          outputEval: $(self[0].contents.split('\n'))
+      - id: months
+        type: File[]
+        outputBinding:
+          glob: month_*.json
+
+  - id: rm_cloud
+    script: S2-cloud-free-best-pixel/cli/rm_cloud/rm_cloud.py
+    requirements: S2-cloud-free-best-pixel/cli/rm_cloud/requirements.txt
+    scatter_method: dotproduct
+    inputs:
+      - id: item_url
+        source: search/urls
+        scatter: true
+    outputs:
+      - id: cloud_masked
+        type: File
+        outputBinding:
+          glob: "*.tif"
+
+  - id: mosaic
+    script: S2-cloud-free-best-pixel/cli/mosaic/mosaic.py
+    scatter_method: dotproduct
+    inputs:
+      - id: intersects
+        source: cloud-free-best-pixel/intersects
+      - id: months
+        source: search/months
+        scatter: true
+        type: File[]
+      - id: images
+        source: rm_cloud/cloud_masked
+    outputs:
+      - id: best_pixel
+        type: File
+        outputBinding:
+          glob: "*.tif"
+
+  - id: make_stac
+    script: S2-cloud-free-best-pixel/cli/make_stac/make_stac.py
+    requirements: S2-cloud-free-best-pixel/cli/make_stac/requirements.txt
+    inputs:
+      - id: geometry
+        source: cloud-free-best-pixel/intersects
+      - id: files
+        source: mosaic/best_pixel
+        type: File[]
+    outputs:
+      - id: stac_catalog
+        outputBinding:
+          glob: .
+        type: Directory
