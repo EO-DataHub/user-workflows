@@ -163,3 +163,5 @@ cython_debug/
 
 test-1/data/
 test-3/data/
+S2-cloud-free-best-pixel/data/
+S1-coherence/data/
