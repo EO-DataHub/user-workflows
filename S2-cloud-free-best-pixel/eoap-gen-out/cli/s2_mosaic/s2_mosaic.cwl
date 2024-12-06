@@ -1,6 +1,6 @@
 class: CommandLineTool
 id: 
-  file:///home/figi/software/work/eodh/user-workflows/S2-cloud-free-best-pixel/eoap-gen-out/cli/s2_mosaic/s2_mosaic.cwl
+  file:///home/runner/work/user-workflows/user-workflows/S2-cloud-free-best-pixel/eoap-gen-out/cli/s2_mosaic/s2_mosaic.cwl
 inputs:
 - id: all_images
   doc: ALL_IMAGES
