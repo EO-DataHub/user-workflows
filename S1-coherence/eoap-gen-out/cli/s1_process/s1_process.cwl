@@ -1,6 +1,6 @@
 class: CommandLineTool
 id: 
-  file:///home/figi/software/work/eodh/user-workflows/S1-coherence/eoap-gen-out/cli/s1_process/s1_process.cwl
+  file:///home/runner/work/user-workflows/user-workflows/S1-coherence/eoap-gen-out/cli/s1_process/s1_process.cwl
 inputs:
 - id: intersects
   inputBinding:

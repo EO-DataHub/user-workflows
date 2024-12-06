@@ -1,6 +1,6 @@
 class: CommandLineTool
 id: 
-  file:///home/figi/software/work/eodh/user-workflows/S1-coherence/eoap-gen-out/cli/s1_make_stac/s1_make_stac.cwl
+  file:///home/runner/work/user-workflows/user-workflows/S1-coherence/eoap-gen-out/cli/s1_make_stac/s1_make_stac.cwl
 inputs:
 - id: files
   doc: FILES

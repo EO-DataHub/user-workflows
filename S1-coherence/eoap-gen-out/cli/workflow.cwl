@@ -53,7 +53,7 @@ steps:
   out:
   - id: pairs
   run: 
-    /home/figi/software/work/eodh/user-workflows/S1-coherence/eoap-gen-out/cli/s1_search/s1_search.cwl
+    /home/runner/work/user-workflows/user-workflows/S1-coherence/eoap-gen-out/cli/s1_search/s1_search.cwl
 - id: s1_process
   in:
   - id: pair
@@ -63,7 +63,7 @@ steps:
   out:
   - id: coherence
   run: 
-    /home/figi/software/work/eodh/user-workflows/S1-coherence/eoap-gen-out/cli/s1_process/s1_process.cwl
+    /home/runner/work/user-workflows/user-workflows/S1-coherence/eoap-gen-out/cli/s1_process/s1_process.cwl
   scatter:
   - pair
   scatterMethod: dotproduct
@@ -76,4 +76,4 @@ steps:
   out:
   - id: stac_catalog
   run: 
-    /home/figi/software/work/eodh/user-workflows/S1-coherence/eoap-gen-out/cli/s1_make_stac/s1_make_stac.cwl
+    /home/runner/work/user-workflows/user-workflows/S1-coherence/eoap-gen-out/cli/s1_make_stac/s1_make_stac.cwl

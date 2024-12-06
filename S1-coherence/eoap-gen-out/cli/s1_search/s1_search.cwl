@@ -1,6 +1,6 @@
 class: CommandLineTool
 id: 
-  file:///home/figi/software/work/eodh/user-workflows/S1-coherence/eoap-gen-out/cli/s1_search/s1_search.cwl
+  file:///home/runner/work/user-workflows/user-workflows/S1-coherence/eoap-gen-out/cli/s1_search/s1_search.cwl
 inputs:
 - id: end_datetime
   inputBinding:
