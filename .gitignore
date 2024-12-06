@@ -168,3 +168,4 @@ S1-coherence/data/
 
 *-venv/
 local-test
+cwl_inputs.yml

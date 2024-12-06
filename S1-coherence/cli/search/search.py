@@ -1,4 +1,5 @@
 import json
+import os
 from itertools import combinations
 
 import click
@@ -11,7 +12,12 @@ from shapely.geometry import shape
 @click.option("--start-datetime")
 @click.option("--end-datetime")
 @click.option("--intersects")
-def main(start_datetime, end_datetime, intersects):
+@click.option("--username")
+@click.option("--password")
+def main(start_datetime, end_datetime, intersects, username, password):
+    os.environ["EODAG__COP_DATASPACE__AUTH__CREDENTIALS__USERNAME"] = username
+    os.environ["EODAG__COP_DATASPACE__AUTH__CREDENTIALS__PASSWORD"] = password
+
     dag = EODataAccessGateway()
     dag.set_preferred_provider("cop_dataspace")
 
@@ -22,7 +28,7 @@ def main(start_datetime, end_datetime, intersects):
         "geom": shape(json.loads(intersects)).bounds,
     }
 
-    results, _ = dag.search(**search_criteria)
+    results = dag.search(**search_criteria)
 
     # Find overlaps
     data = []
