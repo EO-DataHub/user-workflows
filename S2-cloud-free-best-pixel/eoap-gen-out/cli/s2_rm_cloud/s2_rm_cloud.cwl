@@ -1,6 +1,6 @@
 class: CommandLineTool
 id: 
-  file:///home/runner/work/user-workflows/user-workflows/S2-cloud-free-best-pixel/eoap-gen-out/cli/s2_rm_cloud/s2_rm_cloud.cwl
+  file:///home/figi/software/work/eodh/user-workflows/S2-cloud-free-best-pixel/eoap-gen-out/cli/s2_rm_cloud/s2_rm_cloud.cwl
 inputs:
 - id: item_url
   inputBinding:

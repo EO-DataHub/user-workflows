@@ -1,6 +1,6 @@
 class: CommandLineTool
 id: 
-  file:///home/runner/work/user-workflows/user-workflows/S2-cloud-free-best-pixel/eoap-gen-out/cli/s2_make_stac/s2_make_stac.cwl
+  file:///home/figi/software/work/eodh/user-workflows/S2-cloud-free-best-pixel/eoap-gen-out/cli/s2_make_stac/s2_make_stac.cwl
 inputs:
 - id: files
   doc: FILES

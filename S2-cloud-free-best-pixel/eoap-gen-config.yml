@@ -76,6 +76,9 @@ steps:
   - id: s2_rm_cloud
     script: S2-cloud-free-best-pixel/cli/rm_cloud/rm_cloud.py
     requirements: S2-cloud-free-best-pixel/cli/rm_cloud/requirements.txt
+    conda:
+      - dask
+      - gdal
     scatter_method: dotproduct
     inputs:
       - id: item_url

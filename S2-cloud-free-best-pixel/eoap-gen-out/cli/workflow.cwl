@@ -68,7 +68,7 @@ steps:
   - id: urls
   - id: months
   run: 
-    /home/runner/work/user-workflows/user-workflows/S2-cloud-free-best-pixel/eoap-gen-out/cli/s2_search/s2_search.cwl
+    /home/figi/software/work/eodh/user-workflows/S2-cloud-free-best-pixel/eoap-gen-out/cli/s2_search/s2_search.cwl
 - id: s2_rm_cloud
   in:
   - id: item_url
@@ -76,7 +76,7 @@ steps:
   out:
   - id: cloud_masked
   run: 
-    /home/runner/work/user-workflows/user-workflows/S2-cloud-free-best-pixel/eoap-gen-out/cli/s2_rm_cloud/s2_rm_cloud.cwl
+    /home/figi/software/work/eodh/user-workflows/S2-cloud-free-best-pixel/eoap-gen-out/cli/s2_rm_cloud/s2_rm_cloud.cwl
   scatter:
   - item_url
   scatterMethod: dotproduct
@@ -91,7 +91,7 @@ steps:
   out:
   - id: best_pixel
   run: 
-    /home/runner/work/user-workflows/user-workflows/S2-cloud-free-best-pixel/eoap-gen-out/cli/s2_mosaic/s2_mosaic.cwl
+    /home/figi/software/work/eodh/user-workflows/S2-cloud-free-best-pixel/eoap-gen-out/cli/s2_mosaic/s2_mosaic.cwl
   scatter:
   - month_json
   scatterMethod: dotproduct
@@ -104,4 +104,4 @@ steps:
   out:
   - id: stac_catalog
   run: 
-    /home/runner/work/user-workflows/user-workflows/S2-cloud-free-best-pixel/eoap-gen-out/cli/s2_make_stac/s2_make_stac.cwl
+    /home/figi/software/work/eodh/user-workflows/S2-cloud-free-best-pixel/eoap-gen-out/cli/s2_make_stac/s2_make_stac.cwl
