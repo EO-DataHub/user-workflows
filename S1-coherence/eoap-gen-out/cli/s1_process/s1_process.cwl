@@ -12,6 +12,18 @@ inputs:
   inputBinding:
     prefix: --pair
   type: File
+- id: password
+  inputBinding:
+    prefix: --password
+  type:
+  - "null"
+  - string
+- id: username
+  inputBinding:
+    prefix: --username
+  type:
+  - "null"
+  - string
 outputs:
 - id: coherence
   outputBinding:

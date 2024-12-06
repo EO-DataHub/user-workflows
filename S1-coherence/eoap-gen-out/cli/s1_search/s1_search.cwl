@@ -14,9 +14,21 @@ inputs:
   type:
   - "null"
   - string
+- id: password
+  inputBinding:
+    prefix: --password
+  type:
+  - "null"
+  - string
 - id: start_datetime
   inputBinding:
     prefix: --start-datetime
+  type:
+  - "null"
+  - string
+- id: username
+  inputBinding:
+    prefix: --username
   type:
   - "null"
   - string

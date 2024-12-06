@@ -31,6 +31,14 @@ inputs:
   doc: End datetime
   default: '2023-06-30'
   type: string
+- id: username
+  label: Username
+  doc: Username
+  type: string
+- id: password
+  label: Password
+  doc: Password
+  type: string
 outputs:
 - id: stac_output
   outputSource:
@@ -50,6 +58,10 @@ steps:
     source: s1-coherence/start_datetime
   - id: end_datetime
     source: s1-coherence/end_datetime
+  - id: username
+    source: s1-coherence/username
+  - id: password
+    source: s1-coherence/password
   out:
   - id: pairs
   run: 
@@ -60,6 +72,10 @@ steps:
     source: s1_search/pairs
   - id: intersects
     source: s1-coherence/intersects
+  - id: username
+    source: s1-coherence/username
+  - id: password
+    source: s1-coherence/password
   out:
   - id: coherence
   run: 

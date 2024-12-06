@@ -39,6 +39,18 @@ $graph:
     inputBinding:
       prefix: --pair
     type: File
+  - id: '#s1_process/password'
+    inputBinding:
+      prefix: --password
+    type:
+    - 'null'
+    - string
+  - id: '#s1_process/username'
+    inputBinding:
+      prefix: --username
+    type:
+    - 'null'
+    - string
   outputs:
   - id: '#s1_process/coherence'
     outputBinding:
@@ -67,9 +79,21 @@ $graph:
     type:
     - 'null'
     - string
+  - id: '#s1_search/password'
+    inputBinding:
+      prefix: --password
+    type:
+    - 'null'
+    - string
   - id: '#s1_search/start_datetime'
     inputBinding:
       prefix: --start-datetime
+    type:
+    - 'null'
+    - string
+  - id: '#s1_search/username'
+    inputBinding:
+      prefix: --username
     type:
     - 'null'
     - string
@@ -111,6 +135,14 @@ $graph:
     doc: End datetime
     default: '2023-06-30'
     type: string
+  - id: '#s1-coherence/username'
+    label: Username
+    doc: Username
+    type: string
+  - id: '#s1-coherence/password'
+    label: Password
+    doc: Password
+    type: string
   outputs:
   - id: '#s1-coherence/stac_output'
     outputSource:
@@ -129,6 +161,10 @@ $graph:
       source: '#s1-coherence/start_datetime'
     - id: '#s1-coherence/s1_search/end_datetime'
       source: '#s1-coherence/end_datetime'
+    - id: '#s1-coherence/s1_search/username'
+      source: '#s1-coherence/username'
+    - id: '#s1-coherence/s1_search/password'
+      source: '#s1-coherence/password'
     out:
     - id: '#s1-coherence/s1_search/pairs'
     run: '#s1_search'
@@ -138,6 +174,10 @@ $graph:
       source: '#s1-coherence/s1_search/pairs'
     - id: '#s1-coherence/s1_process/intersects'
       source: '#s1-coherence/intersects'
+    - id: '#s1-coherence/s1_process/username'
+      source: '#s1-coherence/username'
+    - id: '#s1-coherence/s1_process/password'
+      source: '#s1-coherence/password'
     out:
     - id: '#s1-coherence/s1_process/coherence'
     run: '#s1_process'
