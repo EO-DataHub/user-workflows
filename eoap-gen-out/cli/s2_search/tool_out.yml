@@ -1,0 +1,12 @@
+outputs:
+  urls:
+    type: string[]
+    outputBinding:
+      loadContents: true
+      glob: urls.txt
+      outputEval: $(self[0].contents.split('\n'))
+  months:
+    type: File[]
+    outputBinding:
+      glob: month_*.json
+

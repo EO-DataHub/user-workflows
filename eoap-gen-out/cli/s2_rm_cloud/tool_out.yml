@@ -1,0 +1,6 @@
+outputs:
+  cloud_masked:
+    type: File
+    outputBinding:
+      glob: '*.tif'
+
