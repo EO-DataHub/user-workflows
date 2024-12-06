@@ -1,5 +1,0 @@
-outputs:
-  stac_catalog:
-    outputBinding:
-      glob: .
-    type: Directory

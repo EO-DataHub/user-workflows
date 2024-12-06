@@ -9,6 +9,7 @@ jobs:
     uses: EO-DataHub/eoap-gen/.github/workflows/generate-reusable.yml@main
     with:
       config: S2-cloud-free-best-pixel/eoap-gen-config.yml
+      output: S2-cloud-free-best-pixel/eoap-gen-out
     permissions:
       contents: write
       packages: write

@@ -1,6 +1,0 @@
-outputs:
-  best_pixel:
-    type: File
-    outputBinding:
-      glob: '*.tif'
-
