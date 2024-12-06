@@ -18,7 +18,7 @@ outputs:
   type: Directory
 requirements:
 - class: DockerRequirement
-  dockerPull: ghcr.io/EO-DataHub/user-workflows/s2_make_stac:main
+  dockerPull: ghcr.io/eo-datahub/user-workflows/s2_make_stac:main
 - class: InlineJavascriptRequirement
 doc: |
   None

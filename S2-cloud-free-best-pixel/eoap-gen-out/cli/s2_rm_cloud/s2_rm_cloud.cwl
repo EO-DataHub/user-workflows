@@ -15,7 +15,7 @@ outputs:
   type: File
 requirements:
 - class: DockerRequirement
-  dockerPull: ghcr.io/EO-DataHub/user-workflows/s2_rm_cloud:main
+  dockerPull: ghcr.io/eo-datahub/user-workflows/s2_rm_cloud:main
 - class: InlineJavascriptRequirement
 doc: |
   None

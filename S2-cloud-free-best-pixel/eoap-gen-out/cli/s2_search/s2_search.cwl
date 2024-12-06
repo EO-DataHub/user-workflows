@@ -49,7 +49,7 @@ outputs:
     type: array
 requirements:
 - class: DockerRequirement
-  dockerPull: ghcr.io/EO-DataHub/user-workflows/s2_search:main
+  dockerPull: ghcr.io/eo-datahub/user-workflows/s2_search:main
 - class: InlineJavascriptRequirement
 doc: |
   None

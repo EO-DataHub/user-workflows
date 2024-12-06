@@ -22,7 +22,7 @@ outputs:
   type: File
 requirements:
 - class: DockerRequirement
-  dockerPull: ghcr.io/EO-DataHub/user-workflows/s2_mosaic:main
+  dockerPull: ghcr.io/eo-datahub/user-workflows/s2_mosaic:main
 - class: InlineJavascriptRequirement
 doc: |
   None
