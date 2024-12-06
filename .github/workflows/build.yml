@@ -1,0 +1,16 @@
+name: Build
+
+on:
+  push:
+  workflow_dispatch:
+
+jobs:
+  build:
+    uses: EO-DataHub/eoap-gen/.github/workflows/generate-reusable.yml@main
+    with:
+      config: S2-cloud-free-best-pixel/eoap-gen-config.yml
+    permissions:
+      contents: write
+      packages: write
+      attestations: write
+      id-token: write
