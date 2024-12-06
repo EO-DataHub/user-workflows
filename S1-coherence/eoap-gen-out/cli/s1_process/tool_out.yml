@@ -1,0 +1,6 @@
+outputs:
+  coherence:
+    type: File
+    outputBinding:
+      glob: data/results/*/coh_vv.tif
+

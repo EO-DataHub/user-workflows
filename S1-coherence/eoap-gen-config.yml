@@ -1,0 +1,88 @@
+id: s1-coherence
+doc: Generate Sentinel 1 image pair coherence
+label: S1 coherence
+inputs:
+  - id: intersects
+    label: Intersects
+    doc: >
+      a GeoJSON-like json string, which provides a "type" member describing the type of the geometry and "coordinates" 
+      member providing a list of coordinates. Will search for images intersecting this geometry.
+    type: string
+    default: >
+      {
+        "type": "Polygon",
+        "coordinates": [
+          [
+            [0.08905898091569497, 52.69722175598818],
+            [0.08905898091569497, 52.15527412683906],
+            [0.9565339502005088, 52.15527412683906],
+            [0.9565339502005088, 52.69722175598818],
+            [0.08905898091569497, 52.69722175598818]
+          ]
+        ]
+      }
+  - id: start_datetime
+    label: Start datetime
+    doc: Start datetime
+    type: string
+    default: "2023-04-01"
+  - id: end_datetime
+    label: End datetime
+    doc: End datetime
+    type: string
+    default: "2023-06-30"
+
+outputs:
+  - id: stac_output
+    type: Directory
+    source: s1_make_stac/stac_catalog
+steps:
+  - id: s1_search
+    script: S1-coherence/cli/search/search.py
+    requirements: S1-coherence/cli/search/requirements.txt
+    inputs:
+      - id: intersects
+        source: s1-coherence/intersects
+      - id: start_datetime
+        source: s1-coherence/start_datetime
+      - id: end_datetime
+        source: s1-coherence/end_datetime
+    outputs:
+      - id: pairs
+        type: File[]
+        outputBinding:
+          glob: pair_*.geojson
+
+  - id: s1_process
+    script: S1-coherence/cli/process/process.py
+    requirements: S1-coherence/cli/process/requirements.txt
+    conda:
+      - eo-tools
+    scatter_method: dotproduct
+    inputs:
+      - id: pair
+        source: s1_search/pairs
+        type: File
+        scatter: true
+      - id: intersects
+        source: s1-coherence/intersects
+    outputs:
+      - id: coherence
+        type: File
+        outputBinding:
+          glob: "data/results/*/coh_vv.tif"
+
+  - id: s1_make_stac
+    script: S1-coherence/cli/make_stac/make_stac.py
+    requirements: S1-coherence/cli/make_stac/requirements.txt
+    inputs:
+      - id: intersects
+        source: s1-coherence/intersects
+      - id: files
+        source: s1_process/coherence
+        type: File[]
+    outputs:
+      - id: stac_catalog
+        outputBinding:
+          glob: .
+        type: Directory

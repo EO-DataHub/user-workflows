@@ -1,0 +1,6 @@
+outputs:
+  pairs:
+    type: File[]
+    outputBinding:
+      glob: pair_*.geojson
+
