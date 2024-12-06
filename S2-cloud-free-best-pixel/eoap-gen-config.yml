@@ -45,9 +45,9 @@ inputs:
 outputs:
   - id: stac_output
     type: Directory
-    source: make_stac/stac_catalog
+    source: s2_make_stac/stac_catalog
 steps:
-  - id: search
+  - id: s2_search
     script: S2-cloud-free-best-pixel/cli/search/search.py
     requirements: S2-cloud-free-best-pixel/cli/search/requirements.txt
     inputs:
@@ -73,13 +73,13 @@ steps:
         outputBinding:
           glob: month_*.json
 
-  - id: rm_cloud
+  - id: s2_rm_cloud
     script: S2-cloud-free-best-pixel/cli/rm_cloud/rm_cloud.py
     requirements: S2-cloud-free-best-pixel/cli/rm_cloud/requirements.txt
     scatter_method: dotproduct
     inputs:
       - id: item_url
-        source: search/urls
+        source: s2_search/urls
         scatter: true
     outputs:
       - id: cloud_masked
@@ -87,19 +87,21 @@ steps:
         outputBinding:
           glob: "*.tif"
 
-  - id: mosaic
+  - id: s2_mosaic
     script: S2-cloud-free-best-pixel/cli/mosaic/mosaic.py
     requirements: S2-cloud-free-best-pixel/cli/mosaic/requirements.txt
+    apt_install:
+      - pktools
     scatter_method: dotproduct
     inputs:
       - id: intersects
         source: cloud-free-best-pixel/intersects
       - id: month_json
-        source: search/months
+        source: s2_search/months
         scatter: true
         type: File
       - id: all_images
-        source: rm_cloud/cloud_masked
+        source: s2_rm_cloud/cloud_masked
         type: File[]
     outputs:
       - id: best_pixel
@@ -107,14 +109,14 @@ steps:
         outputBinding:
           glob: "*.tif"
 
-  - id: make_stac
+  - id: s2_make_stac
     script: S2-cloud-free-best-pixel/cli/make_stac/make_stac.py
     requirements: S2-cloud-free-best-pixel/cli/make_stac/requirements.txt
     inputs:
       - id: geometry
         source: cloud-free-best-pixel/intersects
       - id: files
-        source: mosaic/best_pixel
+        source: s2_mosaic/best_pixel
         type: File[]
     outputs:
       - id: stac_catalog
