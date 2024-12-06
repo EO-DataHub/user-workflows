@@ -5,7 +5,18 @@ on:
   workflow_dispatch:
 
 jobs:
-  build:
+  build-s1:
+    uses: EO-DataHub/eoap-gen/.github/workflows/generate-reusable.yml@main
+    with:
+      config: S1-coherence/eoap-gen-config.yml
+      output: S1-coherence/eoap-gen-out
+    permissions:
+      contents: write
+      packages: write
+      attestations: write
+      id-token: write
+
+  build-s2:
     uses: EO-DataHub/eoap-gen/.github/workflows/generate-reusable.yml@main
     with:
       config: S2-cloud-free-best-pixel/eoap-gen-config.yml
