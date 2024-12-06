@@ -15,7 +15,7 @@ $graph:
     - string
   requirements:
   - class: DockerRequirement
-    dockerPull: ghcr.io/EO-DataHub/user-workflows/s1_make_stac:main
+    dockerPull: ghcr.io/eo-datahub/user-workflows/s1_make_stac:main
   - class: InlineJavascriptRequirement
   doc: "None\n"
   baseCommand:
@@ -46,7 +46,7 @@ $graph:
     type: File
   requirements:
   - class: DockerRequirement
-    dockerPull: ghcr.io/EO-DataHub/user-workflows/s1_process:main
+    dockerPull: ghcr.io/eo-datahub/user-workflows/s1_process:main
   - class: InlineJavascriptRequirement
   doc: "None\n"
   baseCommand:
@@ -82,7 +82,7 @@ $graph:
       type: array
   requirements:
   - class: DockerRequirement
-    dockerPull: ghcr.io/EO-DataHub/user-workflows/s1_search:main
+    dockerPull: ghcr.io/eo-datahub/user-workflows/s1_search:main
   - class: InlineJavascriptRequirement
   doc: "None\n"
   baseCommand:

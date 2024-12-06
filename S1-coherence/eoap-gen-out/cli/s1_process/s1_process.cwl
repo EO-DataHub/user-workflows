@@ -19,7 +19,7 @@ outputs:
   type: File
 requirements:
 - class: DockerRequirement
-  dockerPull: ghcr.io/EO-DataHub/user-workflows/s1_process:main
+  dockerPull: ghcr.io/eo-datahub/user-workflows/s1_process:main
 - class: InlineJavascriptRequirement
 doc: |
   None
