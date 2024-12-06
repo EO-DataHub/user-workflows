@@ -1,5 +1,5 @@
-from itertools import combinations
 import json
+from itertools import combinations
 
 import click
 import geopandas as gpd
@@ -19,7 +19,7 @@ def main(start_datetime, end_datetime, intersects):
         "productType": "S1_SAR_SLC",
         "start": start_datetime,
         "end": end_datetime,
-        "geom": shape(intersects).bounds,
+        "geom": shape(json.loads(intersects)).bounds,
     }
 
     results, _ = dag.search(**search_criteria)
