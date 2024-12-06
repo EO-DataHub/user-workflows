@@ -10,6 +10,7 @@ jobs:
     with:
       config: S1-coherence/eoap-gen-config.yml
       output: S1-coherence/eoap-gen-out
+      docker_url_base: ghcr.io/eo-datahub/user-workflows
     permissions:
       contents: write
       packages: write
@@ -21,6 +22,7 @@ jobs:
     with:
       config: S2-cloud-free-best-pixel/eoap-gen-config.yml
       output: S2-cloud-free-best-pixel/eoap-gen-out
+      docker_url_base: ghcr.io/eo-datahub/user-workflows
     permissions:
       contents: write
       packages: write
