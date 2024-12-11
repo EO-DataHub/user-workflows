@@ -1,6 +1,11 @@
 id: cloud-free-best-pixel
 doc: Generate cloud free best pixel mosaic on a per month basis
 label: Cloud free best pixel
+
+resources: # current ADES max is 4 cores and 16GB RAM, we need all we can get
+  cores_min: 4
+  ram_min: 16000
+
 inputs:
   - id: catalog
     label: Catalog path
