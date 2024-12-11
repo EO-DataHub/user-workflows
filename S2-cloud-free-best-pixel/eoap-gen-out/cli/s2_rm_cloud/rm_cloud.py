@@ -10,14 +10,18 @@ from pyeodh.resource_catalog import Item
 @click.command()
 @click.option("--item-url")
 def main(item_url):
-    if not item_url:
-        return
+    print(f"item_url: {item_url}")
 
+    print("Fetching from stac...")
     item = Item.from_href(pyeodh.Client(), item_url)
 
     cloud_href = item.assets["cloud"].href
     valid_href = item.assets["valid_pixels"].href
     cog_href = item.assets["cog"].href
+    print(f"cloud_href: {cloud_href}")
+    print(f"valid_href: {valid_href}")
+    print(f"cog_href: {cog_href}")
+
     print("open_rasterio")
     valid = rioxarray.open_rasterio(valid_href, chunks=True)
     cloud = rioxarray.open_rasterio(cloud_href, chunks=True)

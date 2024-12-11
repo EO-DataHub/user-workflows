@@ -11,11 +11,16 @@ from datetime import date, timedelta
 @click.option("--start-datetime")
 @click.option("--end-datetime")
 def main(catalog, collection, intersects, start_datetime, end_datetime):
-    if not catalog or not collection or not intersects:
-        return
+    print("Inputs:")
+    print(f"catalog: {catalog}")
+    print(f"collection: {collection}")
+    print(f"intersects: {intersects}")
+    print(f"start_datetime: {start_datetime}")
+    print(f"end_datetime: {end_datetime}")
 
     intersects = json.loads(intersects)
     rc = pyeodh.Client().get_catalog_service()
+    print("Searching...")
     items = rc.search(
         collections=[collection],
         catalog_paths=[catalog],
@@ -38,6 +43,8 @@ def main(catalog, collection, intersects, start_datetime, end_datetime):
                 "href": item._pystac_object.self_href,
             }
         )
+    print(f"Urls: {urls}")
+    print(f"Months: {months}")
 
     with open("urls.txt", "w") as f:
         print(*urls, file=f, sep="\n", end="")
