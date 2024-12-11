@@ -176,6 +176,9 @@ $graph:
     type: Directory
   requirements:
   - class: ScatterFeatureRequirement
+  - class: ResourceRequirement
+    coresMin: 4
+    ramMin: 16000
   label: Cloud free best pixel
   doc: Generate cloud free best pixel mosaic on a per month basis
   steps:
