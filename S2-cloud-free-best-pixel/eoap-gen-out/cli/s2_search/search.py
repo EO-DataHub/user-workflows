@@ -51,6 +51,7 @@ def main(catalog, collection, intersects, start_datetime, end_datetime):
 
     for month in months:
         if len(months[month]) == 0:
+            print(f"No items for month {month}")
             continue
         with open(f"month_{month}.json", "w") as f:
             json.dump(months[month], f)

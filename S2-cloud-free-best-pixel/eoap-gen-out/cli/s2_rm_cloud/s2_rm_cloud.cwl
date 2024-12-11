@@ -21,5 +21,6 @@ doc: |
   None
 cwlVersion: v1.0
 baseCommand:
+- /usr/local/bin/_entrypoint.sh
 - python
 - /app/app.py

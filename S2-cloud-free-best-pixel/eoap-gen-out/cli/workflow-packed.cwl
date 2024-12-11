@@ -77,6 +77,7 @@ $graph:
   - class: InlineJavascriptRequirement
   doc: "None\n"
   baseCommand:
+  - /usr/local/bin/_entrypoint.sh
   - python
   - /app/app.py
 - class: CommandLineTool
