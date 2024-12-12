@@ -43,6 +43,11 @@ def main(catalog, collection, intersects, start_datetime, end_datetime):
                 "href": item._pystac_object.self_href,
             }
         )
+    if len(urls) == 0:
+        raise RuntimeError(
+            "No items found, check your inputs and stac api availability"
+        )
+
     print(f"Urls: {urls}")
     print(f"Months: {months}")
 
