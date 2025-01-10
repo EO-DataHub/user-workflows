@@ -43,7 +43,7 @@ def main(pair, intersects, username, password):
         pol="vv",
         subswaths=["IW1", "IW2", "IW3"],
         write_coherence=True,
-        write_interferogram=True,
+        write_interferogram=False,
         write_primary_amplitude=False,
         write_secondary_amplitude=False,
         apply_fast_esd=True,

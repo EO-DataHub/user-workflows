@@ -14,6 +14,8 @@ import shapely
 @click.argument("files", nargs=-1)
 @click.option("--intersects")
 def main(files, intersects):
+    print("files:")
+    print(files)
     geometry = json.loads(intersects)
     bbox = shapely.geometry.shape(geometry).bounds
 
