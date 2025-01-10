@@ -56,6 +56,9 @@ def main(pair, intersects, username, password):
         warp_kernel="bicubic",
         clip_to_shape=True,
     )
+    print("processing done")
+    for i in os.walk("data"):
+        print(i)
 
 
 if __name__ == "__main__":
