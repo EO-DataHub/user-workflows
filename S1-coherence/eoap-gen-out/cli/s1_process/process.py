@@ -19,16 +19,21 @@ def main(pair, intersects, username, password):
 
     dag = EODataAccessGateway()
     dag.set_preferred_provider("cop_dataspace")
+    print("setup dag")
 
     shp = shapely.geometry.shape(json.loads(intersects))
 
     with open(pair, "r") as f:
         pair = json.load(f)
 
+    print("pair:")
+    print(pair)
+
     products = [EOProduct.from_geojson(item) for item in pair]
     downloaded_0 = dag.download(products[0], outputs_prefix="data", extract=False)
     downloaded_1 = dag.download(products[1], outputs_prefix="data", extract=False)
 
+    print("processing...")
     process_insar(
         dir_prm=downloaded_0,
         dir_sec=downloaded_1,
