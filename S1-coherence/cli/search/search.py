@@ -20,6 +20,7 @@ def main(start_datetime, end_datetime, intersects, username, password):
 
     dag = EODataAccessGateway()
     dag.set_preferred_provider("cop_dataspace")
+    print("setup dag")
 
     search_criteria = {
         "productType": "S1_SAR_SLC",
@@ -55,6 +56,8 @@ def main(start_datetime, end_datetime, intersects, username, password):
                 overlaps.append((row1["id"], row2["id"], overlap_ratio))
 
     overlap_ids = [entry[:-1] for entry in overlaps]
+    print("overlap_ids:")
+    print(overlap_ids)
 
     # Save each pair to a separate file, as a geojson
     for idx, pair in enumerate(overlap_ids):
