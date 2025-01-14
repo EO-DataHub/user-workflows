@@ -2,5 +2,5 @@ outputs:
   coherence:
     type: File
     outputBinding:
-      glob: data/results/*/coh_vv.tif
+      glob: data/results/coh_vv.tif
 

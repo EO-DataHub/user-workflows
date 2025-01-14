@@ -27,7 +27,7 @@ inputs:
 outputs:
 - id: coherence
   outputBinding:
-    glob: data/results/*/coh_vv.tif
+    glob: data/results/coh_vv.tif
   type: File
 requirements:
 - class: DockerRequirement

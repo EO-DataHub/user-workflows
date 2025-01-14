@@ -54,7 +54,7 @@ $graph:
   outputs:
   - id: '#s1_process/coherence'
     outputBinding:
-      glob: data/results/*/coh_vv.tif
+      glob: data/results/coh_vv.tif
     type: File
   requirements:
   - class: DockerRequirement

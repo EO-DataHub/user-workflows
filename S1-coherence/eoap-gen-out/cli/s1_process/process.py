@@ -1,5 +1,7 @@
+import glob
 import json
 import os
+import shutil
 
 import click
 import shapely
@@ -59,6 +61,11 @@ def main(pair, intersects, username, password):
     print("processing done")
     for i in os.walk("data"):
         print(i)
+
+    print("moving coherence file")
+    coh_files = glob.glob("data/results/*/coh_vv.tif")
+    if coh_files:
+        shutil.move(coh_files[0], "data/results/coh_vv.tif")
 
 
 if __name__ == "__main__":
