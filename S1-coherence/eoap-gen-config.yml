@@ -86,7 +86,7 @@ steps:
       - id: coherence
         type: File
         outputBinding:
-          glob: "data/results/*/coh_vv.tif"
+          glob: "data/results/coh_vv.tif"
 
   - id: s1_make_stac
     script: S1-coherence/cli/make_stac/make_stac.py
