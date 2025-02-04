@@ -28,3 +28,15 @@ jobs:
       packages: write
       attestations: write
       id-token: write
+
+  build-resize:
+    uses: EO-DataHub/eoap-gen/.github/workflows/generate-reusable.yml@main
+    with:
+      config: resize/eoap-gen-config.yml
+      output: resize/eoap-gen-out
+      docker_url_base: ghcr.io/eo-datahub/user-workflows
+    permissions:
+      contents: write
+      packages: write
+      attestations: write
+      id-token: write

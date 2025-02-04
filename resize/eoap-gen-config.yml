@@ -1,0 +1,60 @@
+id: resize-urls
+doc: Resize urls
+label: Resize urls
+
+inputs:
+  - id: urls
+    label: urls
+    doc: urls
+    type: string[]
+  - id: outsize_x
+    label: outsize_x
+    doc: outsize_x
+    type: string
+    default: 5%
+  - id: outsize_y
+    label: outsize_y
+    doc: outsize_y
+    type: string
+    default: 5%
+
+outputs:
+  - id: stac_output
+    type: Directory
+    source: resize_make_stac/stac_catalog
+
+steps:
+  - id: resize_process
+    docker_image: ghcr.io/osgeo/gdal:ubuntu-small-latest
+    command: gdal_translate /vsicurl/${url} ${id} -outsize ${outsize_x} ${outsize_y}
+    scatter_method: dotproduct
+    inputs:
+      - id: outsize_x
+        source: resize-collection/outsize_x
+      - id: outsize_y
+        source: resize-collection/outsize_y
+      - id: url
+        source: get_urls/urls
+        scatter: true
+      - id: id
+        source: get_urls/ids
+        scatter: true
+        value_from: $(self + "_resized.tif")
+    outputs:
+      - id: resized
+        type: File
+        outputBinding:
+          glob: "*.tif"
+
+  - id: resize_make_stac
+    script: resize/cli/make_stac/make_stac.py
+    requirements: resize/cli/make_stac/requirements.txt
+    inputs:
+      - id: files
+        source: resize_process/resized
+        type: File[]
+    outputs:
+      - id: stac_catalog
+        outputBinding:
+          glob: .
+        type: Directory
