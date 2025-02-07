@@ -78,6 +78,8 @@ $graph:
   doc: "None\n"
   baseCommand:
   - /usr/local/bin/_entrypoint.sh
+  - env
+  - HOME=/tmp
   - python
   - /app/app.py
 - class: CommandLineTool
