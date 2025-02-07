@@ -38,5 +38,7 @@ doc: |
 cwlVersion: v1.0
 baseCommand:
 - /usr/local/bin/_entrypoint.sh
+- env
+- HOME=/tmp
 - python
 - /app/app.py
