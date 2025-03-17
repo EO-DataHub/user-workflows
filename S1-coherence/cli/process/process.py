@@ -3,7 +3,6 @@ import json
 import os
 import shutil
 import logging
-import sys
 
 import click
 import shapely
@@ -21,7 +20,6 @@ logger = logging.getLogger(__name__)
 @click.option("--username")
 @click.option("--password")
 def main(pair, intersects, username, password):
-    sys.exit(1)
     os.environ["EODAG__COP_DATASPACE__AUTH__CREDENTIALS__USERNAME"] = username
     os.environ["EODAG__COP_DATASPACE__AUTH__CREDENTIALS__PASSWORD"] = password
 
@@ -36,13 +34,28 @@ def main(pair, intersects, username, password):
 
     logger.info(f"pair: {pair}")
     products = [EOProduct.from_geojson(item) for item in pair]
-    downloaded_0 = dag.download(products[0], outputs_prefix="data", extract=False)
-    downloaded_1 = dag.download(products[1], outputs_prefix="data", extract=False)
+
+    downloaded_products = []
+    for product in products:
+        product_id = product.properties["id"]
+        product_path_in_ws = f"/workspace/pv-figi44-workspace/{product_id}.zip"
+
+        logger.info(f"Checking if product {product_id} is in workspace")
+        if os.path.exists(product_path_in_ws):
+            logger.info(f"Product {product_id} found in workspace")
+            downloaded_products.append(product_path_in_ws)
+        else:
+            logger.info(f"Product {product_id} not found in workspace, downloading...")
+            downloaded_path = dag.download(
+                product, outputs_prefix="data", extract=False
+            )
+            shutil.move(downloaded_path, product_path_in_ws)
+            downloaded_products.append(product_path_in_ws)
 
     logger.info("processing...")
     process_insar(
-        prm_path=downloaded_0,
-        sec_path=downloaded_1,
+        prm_path=downloaded_products[0],
+        sec_path=downloaded_products[1],
         output_dir="data/results",
         aoi_name=None,
         shp=shp,
