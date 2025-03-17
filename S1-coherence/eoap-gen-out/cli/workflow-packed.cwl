@@ -1,13 +1,13 @@
 $graph:
 - class: CommandLineTool
-  id: '#s1_make_stac'
+  id: s1_make_stac
   inputs:
-  - id: '#s1_make_stac/files'
+  - id: files
     doc: FILES
     type:
       type: array
       items: File
-  - id: '#s1_make_stac/intersects'
+  - id: intersects
     inputBinding:
       prefix: --intersects
     type:
@@ -22,37 +22,37 @@ $graph:
   - python
   - /app/app.py
   outputs:
-  - id: '#s1_make_stac/stac_catalog'
+  - id: stac_catalog
     outputBinding:
       glob: .
     type: Directory
 - class: CommandLineTool
-  id: '#s1_process'
+  id: s1_process
   inputs:
-  - id: '#s1_process/intersects'
+  - id: intersects
     inputBinding:
       prefix: --intersects
     type:
     - 'null'
     - string
-  - id: '#s1_process/pair'
+  - id: pair
     inputBinding:
       prefix: --pair
     type: File
-  - id: '#s1_process/password'
+  - id: password
     inputBinding:
       prefix: --password
     type:
     - 'null'
     - string
-  - id: '#s1_process/username'
+  - id: username
     inputBinding:
       prefix: --username
     type:
     - 'null'
     - string
   outputs:
-  - id: '#s1_process/coherence'
+  - id: coherence
     outputBinding:
       glob: data/results/coh_vv.tif
     type: File
@@ -68,40 +68,40 @@ $graph:
   - python
   - /app/app.py
 - class: CommandLineTool
-  id: '#s1_search'
+  id: s1_search
   inputs:
-  - id: '#s1_search/end_datetime'
+  - id: end_datetime
     inputBinding:
       prefix: --end-datetime
     type:
     - 'null'
     - string
-  - id: '#s1_search/intersects'
+  - id: intersects
     inputBinding:
       prefix: --intersects
     type:
     - 'null'
     - string
-  - id: '#s1_search/password'
+  - id: password
     inputBinding:
       prefix: --password
     type:
     - 'null'
     - string
-  - id: '#s1_search/start_datetime'
+  - id: start_datetime
     inputBinding:
       prefix: --start-datetime
     type:
     - 'null'
     - string
-  - id: '#s1_search/username'
+  - id: username
     inputBinding:
       prefix: --username
     type:
     - 'null'
     - string
   outputs:
-  - id: '#s1_search/pairs'
+  - id: pairs
     outputBinding:
       glob: pair_*.geojson
     type:
@@ -116,9 +116,9 @@ $graph:
   - python
   - /app/app.py
 - class: Workflow
-  id: '#s1-coherence'
+  id: s1-coherence
   inputs:
-  - id: '#s1-coherence/intersects'
+  - id: intersects
     label: Intersects
     doc: "a GeoJSON-like json string, which provides a \"type\" member describing
       the type of the geometry and \"coordinates\"  member providing a list of coordinates.
@@ -128,72 +128,72 @@ $graph:
       \ [0.9565339502005088, 52.15527412683906],\n      [0.9565339502005088, 52.69722175598818],\n\
       \      [0.08905898091569497, 52.69722175598818]\n    ]\n  ]\n}\n"
     type: string
-  - id: '#s1-coherence/start_datetime'
+  - id: start_datetime
     label: Start datetime
     doc: Start datetime
     default: '2023-04-01'
     type: string
-  - id: '#s1-coherence/end_datetime'
+  - id: end_datetime
     label: End datetime
     doc: End datetime
     default: '2023-06-30'
     type: string
-  - id: '#s1-coherence/username'
+  - id: username
     label: Username
     doc: Username
     type: string
-  - id: '#s1-coherence/password'
+  - id: password
     label: Password
     doc: Password
     type: string
   outputs:
-  - id: '#s1-coherence/stac_output'
+  - id: stac_output
     outputSource:
-    - '#s1-coherence/s1_make_stac/stac_catalog'
+    - s1_make_stac/stac_catalog
     type: Directory
   requirements:
   - class: ScatterFeatureRequirement
   label: S1 coherence
   doc: Generate Sentinel 1 image pair coherence
   steps:
-  - id: '#s1-coherence/s1_search'
+  - id: s1_search
     in:
-    - id: '#s1-coherence/s1_search/intersects'
-      source: '#s1-coherence/intersects'
-    - id: '#s1-coherence/s1_search/start_datetime'
-      source: '#s1-coherence/start_datetime'
-    - id: '#s1-coherence/s1_search/end_datetime'
-      source: '#s1-coherence/end_datetime'
-    - id: '#s1-coherence/s1_search/username'
-      source: '#s1-coherence/username'
-    - id: '#s1-coherence/s1_search/password'
-      source: '#s1-coherence/password'
+    - id: intersects
+      source: intersects
+    - id: start_datetime
+      source: start_datetime
+    - id: end_datetime
+      source: end_datetime
+    - id: username
+      source: username
+    - id: password
+      source: password
     out:
-    - id: '#s1-coherence/s1_search/pairs'
+    - id: pairs
     run: '#s1_search'
-  - id: '#s1-coherence/s1_process'
+  - id: s1_process
     in:
-    - id: '#s1-coherence/s1_process/pair'
-      source: '#s1-coherence/s1_search/pairs'
-    - id: '#s1-coherence/s1_process/intersects'
-      source: '#s1-coherence/intersects'
-    - id: '#s1-coherence/s1_process/username'
-      source: '#s1-coherence/username'
-    - id: '#s1-coherence/s1_process/password'
-      source: '#s1-coherence/password'
+    - id: pair
+      source: s1_search/pairs
+    - id: intersects
+      source: intersects
+    - id: username
+      source: username
+    - id: password
+      source: password
     out:
-    - id: '#s1-coherence/s1_process/coherence'
+    - id: coherence
     run: '#s1_process'
     scatter:
-    - '#s1-coherence/s1_process/pair'
+    - pair
     scatterMethod: dotproduct
-  - id: '#s1-coherence/s1_make_stac'
+  - id: s1_make_stac
     in:
-    - id: '#s1-coherence/s1_make_stac/intersects'
-      source: '#s1-coherence/intersects'
-    - id: '#s1-coherence/s1_make_stac/files'
-      source: '#s1-coherence/s1_process/coherence'
+    - id: intersects
+      source: intersects
+    - id: files
+      source: s1_process/coherence
     out:
-    - id: '#s1-coherence/s1_make_stac/stac_catalog'
+    - id: stac_catalog
     run: '#s1_make_stac'
 cwlVersion: v1.0

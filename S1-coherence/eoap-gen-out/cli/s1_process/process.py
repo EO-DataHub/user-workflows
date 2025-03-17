@@ -37,9 +37,9 @@ def main(pair, intersects, username, password):
 
     print("processing...")
     process_insar(
-        dir_prm=downloaded_0,
-        dir_sec=downloaded_1,
-        outputs_prefix="data/results",
+        prm_path=downloaded_0,
+        sec_path=downloaded_1,
+        output_dir="data/results",
         aoi_name=None,
         shp=shp,
         pol="vv",
