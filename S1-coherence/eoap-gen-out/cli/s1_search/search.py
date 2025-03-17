@@ -1,11 +1,15 @@
 import json
 import os
+import logging
 from itertools import combinations
 
 import click
 import geopandas as gpd
 from eodag import EODataAccessGateway
 from shapely.geometry import shape
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 @click.command()
@@ -15,12 +19,15 @@ from shapely.geometry import shape
 @click.option("--username")
 @click.option("--password")
 def main(start_datetime, end_datetime, intersects, username, password):
+    for i in os.walk("/workspace"):
+        logger.info(i)
+
     os.environ["EODAG__COP_DATASPACE__AUTH__CREDENTIALS__USERNAME"] = username
     os.environ["EODAG__COP_DATASPACE__AUTH__CREDENTIALS__PASSWORD"] = password
 
     dag = EODataAccessGateway()
     dag.set_preferred_provider("cop_dataspace")
-    print("setup dag")
+    logger.info("setup dag")
 
     search_criteria = {
         "productType": "S1_SAR_SLC",
@@ -56,8 +63,7 @@ def main(start_datetime, end_datetime, intersects, username, password):
                 overlaps.append((row1["id"], row2["id"], overlap_ratio))
 
     overlap_ids = [entry[:-1] for entry in overlaps]
-    print("overlap_ids:")
-    print(overlap_ids)
+    logger.info(f"overlap_ids: {overlap_ids}")
 
     # Save each pair to a separate file, as a geojson
     for idx, pair in enumerate(overlap_ids):
