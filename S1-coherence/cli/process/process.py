@@ -2,12 +2,17 @@ import glob
 import json
 import os
 import shutil
+import logging
+import sys
 
 import click
 import shapely
 from eo_tools.S1.process import process_insar
 from eodag import EODataAccessGateway
 from eodag.api.product._product import EOProduct
+
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
 
 
 @click.command()
@@ -16,26 +21,25 @@ from eodag.api.product._product import EOProduct
 @click.option("--username")
 @click.option("--password")
 def main(pair, intersects, username, password):
+    sys.exit(1)
     os.environ["EODAG__COP_DATASPACE__AUTH__CREDENTIALS__USERNAME"] = username
     os.environ["EODAG__COP_DATASPACE__AUTH__CREDENTIALS__PASSWORD"] = password
 
     dag = EODataAccessGateway()
     dag.set_preferred_provider("cop_dataspace")
-    print("setup dag")
+    logger.info("setup dag")
 
     shp = shapely.geometry.shape(json.loads(intersects))
 
     with open(pair, "r") as f:
         pair = json.load(f)
 
-    print("pair:")
-    print(pair)
-
+    logger.info(f"pair: {pair}")
     products = [EOProduct.from_geojson(item) for item in pair]
     downloaded_0 = dag.download(products[0], outputs_prefix="data", extract=False)
     downloaded_1 = dag.download(products[1], outputs_prefix="data", extract=False)
 
-    print("processing...")
+    logger.info("processing...")
     process_insar(
         prm_path=downloaded_0,
         sec_path=downloaded_1,
@@ -58,11 +62,9 @@ def main(pair, intersects, username, password):
         warp_kernel="bicubic",
         clip_to_shape=True,
     )
-    print("processing done")
-    for i in os.walk("data"):
-        print(i)
+    logger.info("processing done")
 
-    print("moving coherence file")
+    logger.info("moving coherence file")
     coh_files = glob.glob("data/results/*/coh_vv.tif")
     if coh_files:
         shutil.move(coh_files[0], "data/results/coh_vv.tif")
