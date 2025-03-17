@@ -38,7 +38,7 @@ def main(pair, intersects, username, password):
     downloaded_products = []
     for product in products:
         product_id = product.properties["id"]
-        product_path_in_ws = f"/workspace/pv-figi44-workspace/{product_id}.zip"
+        product_path_in_ws = f"/workspace/pv-figi44/{product_id}.zip"
 
         logger.info(f"Checking if product {product_id} is in workspace")
         if os.path.exists(product_path_in_ws):
