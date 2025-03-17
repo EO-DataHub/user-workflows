@@ -1,13 +1,13 @@
 $graph:
 - class: CommandLineTool
-  id: '#s2_make_stac'
+  id: s2_make_stac
   inputs:
-  - id: '#s2_make_stac/files'
+  - id: files
     doc: FILES
     type:
       type: array
       items: File
-  - id: '#s2_make_stac/geometry'
+  - id: geometry
     inputBinding:
       prefix: --geometry
     type:
@@ -22,30 +22,30 @@ $graph:
   - python
   - /app/app.py
   outputs:
-  - id: '#s2_make_stac/stac_catalog'
+  - id: stac_catalog
     outputBinding:
       glob: .
     type: Directory
 - class: CommandLineTool
-  id: '#s2_mosaic'
+  id: s2_mosaic
   inputs:
-  - id: '#s2_mosaic/all_images'
+  - id: all_images
     doc: ALL_IMAGES
     type:
       type: array
       items: File
-  - id: '#s2_mosaic/intersects'
+  - id: intersects
     inputBinding:
       prefix: --intersects
     type:
     - 'null'
     - string
-  - id: '#s2_mosaic/month_json'
+  - id: month_json
     inputBinding:
       prefix: --month-json
     type: File
   outputs:
-  - id: '#s2_mosaic/best_pixel'
+  - id: best_pixel
     outputBinding:
       glob: '*.tif'
     type: File
@@ -58,16 +58,16 @@ $graph:
   - python
   - /app/app.py
 - class: CommandLineTool
-  id: '#s2_rm_cloud'
+  id: s2_rm_cloud
   inputs:
-  - id: '#s2_rm_cloud/item_url'
+  - id: item_url
     inputBinding:
       prefix: --item-url
     type:
     - 'null'
     - string
   outputs:
-  - id: '#s2_rm_cloud/cloud_masked'
+  - id: cloud_masked
     outputBinding:
       glob: '*.tif'
     type: File
@@ -83,46 +83,46 @@ $graph:
   - python
   - /app/app.py
 - class: CommandLineTool
-  id: '#s2_search'
+  id: s2_search
   inputs:
-  - id: '#s2_search/catalog'
+  - id: catalog
     inputBinding:
       prefix: --catalog
     type:
     - 'null'
     - string
-  - id: '#s2_search/collection'
+  - id: collection
     inputBinding:
       prefix: --collection
     type:
     - 'null'
     - string
-  - id: '#s2_search/end_datetime'
+  - id: end_datetime
     inputBinding:
       prefix: --end-datetime
     type:
     - 'null'
     - string
-  - id: '#s2_search/intersects'
+  - id: intersects
     inputBinding:
       prefix: --intersects
     type:
     - 'null'
     - string
-  - id: '#s2_search/start_datetime'
+  - id: start_datetime
     inputBinding:
       prefix: --start-datetime
     type:
     - 'null'
     - string
   outputs:
-  - id: '#s2_search/months'
+  - id: months
     outputBinding:
       glob: month_*.json
     type:
       items: File
       type: array
-  - id: '#s2_search/urls'
+  - id: urls
     outputBinding:
       glob: urls.txt
       loadContents: true
@@ -139,19 +139,19 @@ $graph:
   - python
   - /app/app.py
 - class: Workflow
-  id: '#cloud-free-best-pixel'
+  id: cloud-free-best-pixel
   inputs:
-  - id: '#cloud-free-best-pixel/catalog'
+  - id: catalog
     label: Catalog path
     doc: Full catalog path
     default: supported-datasets/ceda-stac-catalogue
     type: string
-  - id: '#cloud-free-best-pixel/collection'
+  - id: collection
     label: collection id
     doc: collection id
     default: sentinel2_ard
     type: string
-  - id: '#cloud-free-best-pixel/intersects'
+  - id: intersects
     label: Intersects
     doc: "a GeoJSON-like json string, which provides a \"type\" member describing
       the type of the geometry and \"coordinates\"  member providing a list of coordinates.
@@ -161,20 +161,20 @@ $graph:
       \ [0.9565339502005088, 52.15527412683906],\n      [0.9565339502005088, 52.69722175598818],\n\
       \      [0.08905898091569497, 52.69722175598818]\n    ]\n  ]\n}\n"
     type: string
-  - id: '#cloud-free-best-pixel/start_datetime'
+  - id: start_datetime
     label: Start datetime
     doc: Start datetime
     default: '2023-04-01'
     type: string
-  - id: '#cloud-free-best-pixel/end_datetime'
+  - id: end_datetime
     label: End datetime
     doc: End datetime
     default: '2023-06-30'
     type: string
   outputs:
-  - id: '#cloud-free-best-pixel/stac_output'
+  - id: stac_output
     outputSource:
-    - '#cloud-free-best-pixel/s2_make_stac/stac_catalog'
+    - s2_make_stac/stac_catalog
     type: Directory
   requirements:
   - class: ScatterFeatureRequirement
@@ -184,53 +184,53 @@ $graph:
   label: Cloud free best pixel
   doc: Generate cloud free best pixel mosaic on a per month basis
   steps:
-  - id: '#cloud-free-best-pixel/s2_search'
+  - id: s2_search
     in:
-    - id: '#cloud-free-best-pixel/s2_search/catalog'
-      source: '#cloud-free-best-pixel/catalog'
-    - id: '#cloud-free-best-pixel/s2_search/collection'
-      source: '#cloud-free-best-pixel/collection'
-    - id: '#cloud-free-best-pixel/s2_search/intersects'
-      source: '#cloud-free-best-pixel/intersects'
-    - id: '#cloud-free-best-pixel/s2_search/start_datetime'
-      source: '#cloud-free-best-pixel/start_datetime'
-    - id: '#cloud-free-best-pixel/s2_search/end_datetime'
-      source: '#cloud-free-best-pixel/end_datetime'
+    - id: catalog
+      source: catalog
+    - id: collection
+      source: collection
+    - id: intersects
+      source: intersects
+    - id: start_datetime
+      source: start_datetime
+    - id: end_datetime
+      source: end_datetime
     out:
-    - id: '#cloud-free-best-pixel/s2_search/urls'
-    - id: '#cloud-free-best-pixel/s2_search/months'
+    - id: urls
+    - id: months
     run: '#s2_search'
-  - id: '#cloud-free-best-pixel/s2_rm_cloud'
+  - id: s2_rm_cloud
     in:
-    - id: '#cloud-free-best-pixel/s2_rm_cloud/item_url'
-      source: '#cloud-free-best-pixel/s2_search/urls'
+    - id: item_url
+      source: s2_search/urls
     out:
-    - id: '#cloud-free-best-pixel/s2_rm_cloud/cloud_masked'
+    - id: cloud_masked
     run: '#s2_rm_cloud'
     scatter:
-    - '#cloud-free-best-pixel/s2_rm_cloud/item_url'
+    - item_url
     scatterMethod: dotproduct
-  - id: '#cloud-free-best-pixel/s2_mosaic'
+  - id: s2_mosaic
     in:
-    - id: '#cloud-free-best-pixel/s2_mosaic/intersects'
-      source: '#cloud-free-best-pixel/intersects'
-    - id: '#cloud-free-best-pixel/s2_mosaic/month_json'
-      source: '#cloud-free-best-pixel/s2_search/months'
-    - id: '#cloud-free-best-pixel/s2_mosaic/all_images'
-      source: '#cloud-free-best-pixel/s2_rm_cloud/cloud_masked'
+    - id: intersects
+      source: intersects
+    - id: month_json
+      source: s2_search/months
+    - id: all_images
+      source: s2_rm_cloud/cloud_masked
     out:
-    - id: '#cloud-free-best-pixel/s2_mosaic/best_pixel'
+    - id: best_pixel
     run: '#s2_mosaic'
     scatter:
-    - '#cloud-free-best-pixel/s2_mosaic/month_json'
+    - month_json
     scatterMethod: dotproduct
-  - id: '#cloud-free-best-pixel/s2_make_stac'
+  - id: s2_make_stac
     in:
-    - id: '#cloud-free-best-pixel/s2_make_stac/geometry'
-      source: '#cloud-free-best-pixel/intersects'
-    - id: '#cloud-free-best-pixel/s2_make_stac/files'
-      source: '#cloud-free-best-pixel/s2_mosaic/best_pixel'
+    - id: geometry
+      source: intersects
+    - id: files
+      source: s2_mosaic/best_pixel
     out:
-    - id: '#cloud-free-best-pixel/s2_make_stac/stac_catalog'
+    - id: stac_catalog
     run: '#s2_make_stac'
 cwlVersion: v1.0
