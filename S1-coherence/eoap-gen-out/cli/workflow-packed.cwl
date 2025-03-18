@@ -29,6 +29,24 @@ $graph:
 - class: CommandLineTool
   id: s1_process
   inputs:
+  - id: aws_access_key_id
+    inputBinding:
+      prefix: --aws-access-key-id
+    type:
+    - 'null'
+    - string
+  - id: aws_secret_access_key
+    inputBinding:
+      prefix: --aws-secret-access-key
+    type:
+    - 'null'
+    - string
+  - id: aws_session_token
+    inputBinding:
+      prefix: --aws-session-token
+    type:
+    - 'null'
+    - string
   - id: intersects
     inputBinding:
       prefix: --intersects
