@@ -3,7 +3,7 @@ import json
 import os
 import shutil
 import logging
-
+import boto3
 import click
 import shapely
 from eo_tools.S1.process import process_insar
@@ -19,7 +19,18 @@ logger = logging.getLogger(__name__)
 @click.option("--intersects")
 @click.option("--username")
 @click.option("--password")
-def main(pair, intersects, username, password):
+@click.option("--aws-access-key-id")
+@click.option("--aws-secret-access-key")
+@click.option("--aws-session-token")
+def main(
+    pair,
+    intersects,
+    username,
+    password,
+    aws_access_key_id,
+    aws_secret_access_key,
+    aws_session_token,
+):
     os.environ["EODAG__COP_DATASPACE__AUTH__CREDENTIALS__USERNAME"] = username
     os.environ["EODAG__COP_DATASPACE__AUTH__CREDENTIALS__PASSWORD"] = password
 
@@ -35,22 +46,53 @@ def main(pair, intersects, username, password):
     logger.info(f"pair: {pair}")
     products = [EOProduct.from_geojson(item) for item in pair]
 
+    s3 = boto3.client(
+        "s3",
+        aws_access_key_id=aws_access_key_id,
+        aws_secret_access_key=aws_secret_access_key,
+        aws_session_token=aws_session_token,
+    )
+
+    bucket_name = "workspaces-eodhp-staging"
+    workspace_name = "figi44"
+
     downloaded_products = []
     for product in products:
         product_id = product.properties["id"]
-        product_path_in_ws = f"/workspace/pv-figi44/{product_id}.zip"
+        file_name = f"{product_id}.zip"
+        object_name = f"{workspace_name}/{product_id}"
+        download_path = f"data/{file_name}"
 
-        logger.info(f"Checking if product {product_id} is in workspace")
-        if os.path.exists(product_path_in_ws):
-            logger.info(f"Product {product_id} found in workspace")
-            downloaded_products.append(product_path_in_ws)
-        else:
-            logger.info(f"Product {product_id} not found in workspace, downloading...")
-            downloaded_path = dag.download(
-                product, outputs_prefix="data", extract=False
+        response = s3.list_objects_v2(Bucket=bucket_name, Prefix=workspace_name)
+        exists_in_s3 = (
+            next(
+                (
+                    obj
+                    for obj in response.get("Contents", [{}])
+                    if obj.get("Key") == object_name
+                ),
+                None,
             )
-            shutil.move(downloaded_path, product_path_in_ws)
-            downloaded_products.append(product_path_in_ws)
+            is not None
+        )
+
+        if exists_in_s3:
+            logger.info(f"File {object_name} already exists, downloading from s3...")
+            s3.download_file(bucket_name, object_name, download_path)
+            logger.info(f"File {object_name} downloaded")
+        else:
+            logger.info(
+                f"File {object_name} does not exist in s3, downloading from sentinel hub..."
+            )
+            dag.download(product, outputs_prefix="data", extract=False)
+            logger.info(
+                f"File {object_name} downloaded from sentinel hub, uploading to s3..."
+            )
+            s3.upload_file(
+                download_path, bucket_name, f"{workspace_name}/{object_name}"
+            )
+            logger.info(f"File {object_name} uploaded to s3")
+        downloaded_products.append(download_path)
 
     logger.info("processing...")
     process_insar(

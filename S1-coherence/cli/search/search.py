@@ -19,8 +19,6 @@ logger = logging.getLogger(__name__)
 @click.option("--username")
 @click.option("--password")
 def main(start_datetime, end_datetime, intersects, username, password):
-    logger.info(f"env: {os.environ}")
-
     os.environ["EODAG__COP_DATASPACE__AUTH__CREDENTIALS__USERNAME"] = username
     os.environ["EODAG__COP_DATASPACE__AUTH__CREDENTIALS__PASSWORD"] = password
 
