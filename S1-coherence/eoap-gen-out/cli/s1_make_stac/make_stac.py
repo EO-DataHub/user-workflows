@@ -3,26 +3,35 @@ import json
 import os
 import shutil
 from pathlib import Path
+import logging
 
 import click
 import pystac
 import pystac.utils
 import shapely
 
+logging.basicConfig(level=logging.INFO)
+logger = logging.getLogger(__name__)
+
 
 @click.command()
 @click.argument("files", nargs=-1)
 @click.option("--intersects")
 def main(files, intersects):
-    print("files:")
-    print(files)
+    logger.info(f"files: {files}")
+    logger.info(f"intersects: {intersects}")
+
     geometry = json.loads(intersects)
+    logger.info(f"geometry: {geometry}")
+
     bbox = shapely.geometry.shape(geometry).bounds
+    logger.info(f"bbox: {bbox}")
 
     catalog = pystac.Catalog(id="catalog", description="S1 Coherence")
 
     for path in files:
         name = Path(path).stem
+        logger.info(f"Copying: {name} from {path}")
         os.mkdir(name)
         f_copy = shutil.copy(path, f"{name}/")
         item = pystac.Item(
