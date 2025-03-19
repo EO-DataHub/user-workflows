@@ -64,18 +64,12 @@ def main(
             object_name = f"{workspace_name}/{product_id}"
             download_path = f"data/{file_name}"
 
-            response = s3.list_objects_v2(Bucket=bucket_name, Prefix=workspace_name)
-            exists_in_s3 = (
-                next(
-                    (
-                        obj
-                        for obj in response.get("Contents", [{}])
-                        if obj.get("Key") == object_name
-                    ),
-                    None,
-                )
-                is not None
-            )
+            exists_in_s3 = False
+            try:
+                s3.head_object(Bucket=bucket_name, Key=object_name)
+                exists_in_s3 = True
+            except Exception:
+                logger.info(f"File {object_name} not found")
 
             if exists_in_s3:
                 logger.info(
