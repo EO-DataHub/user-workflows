@@ -2,6 +2,10 @@
 
 This repository contains user specific processing workflows for the EO Data Hub.
 
+## S1 Coherence Workflow
+
+To run on ADES, see [this notebook](S1-coherence/ades.ipynb).
+
 ## Development
 
 ### Requirements:
