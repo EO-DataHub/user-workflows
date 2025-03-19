@@ -56,7 +56,7 @@ def main(
 
         bucket_name = "workspaces-eodhp-staging"
         workspace_name = "figi44"
-
+        os.makedirs("data", exist_ok=True)
         downloaded_products = []
         for product in products:
             product_id = product.properties["id"]
