@@ -81,13 +81,11 @@ def main(
                 logger.info(
                     f"File {object_name} does not exist in s3, downloading from sentinel hub..."
                 )
-                dag.download(product, outputs_prefix="data", extract=False)
+                download_path = dag.download(product, output_dir="data", extract=False)
                 logger.info(
-                    f"File {object_name} downloaded from sentinel hub, uploading to s3..."
+                    f"File {download_path} downloaded from sentinel hub, uploading to s3..."
                 )
-                s3.upload_file(
-                    download_path, bucket_name, f"{workspace_name}/{object_name}"
-                )
+                s3.upload_file(download_path, bucket_name, object_name)
                 logger.info(f"File {object_name} uploaded to s3")
             downloaded_products.append(download_path)
 
