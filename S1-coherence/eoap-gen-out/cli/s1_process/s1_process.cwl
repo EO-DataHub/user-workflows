@@ -42,6 +42,12 @@ inputs:
   type:
   - "null"
   - string
+- id: workspace
+  inputBinding:
+    prefix: --workspace
+  type:
+  - "null"
+  - string
 outputs:
 - id: coherence
   outputBinding:

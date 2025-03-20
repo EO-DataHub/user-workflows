@@ -22,6 +22,7 @@ logger = logging.getLogger(__name__)
 @click.option("--aws-access-key-id")
 @click.option("--aws-secret-access-key")
 @click.option("--aws-session-token")
+@click.option("--workspace")
 def main(
     pair,
     intersects,
@@ -30,6 +31,7 @@ def main(
     aws_access_key_id,
     aws_secret_access_key,
     aws_session_token,
+    workspace,
 ):
     os.environ["EODAG__COP_DATASPACE__AUTH__CREDENTIALS__USERNAME"] = username
     os.environ["EODAG__COP_DATASPACE__AUTH__CREDENTIALS__PASSWORD"] = password
@@ -54,7 +56,7 @@ def main(
     )
 
     bucket_name = "workspaces-eodhp-staging"
-    workspace_name = "figi44"
+    workspace_name = workspace
     os.makedirs("data", exist_ok=True)
     downloaded_products = []
     for product in products:
